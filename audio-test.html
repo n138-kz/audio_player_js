@@ -86,18 +86,7 @@
 			document.addEventListener('DOMContentLoaded', onloadDOM, false );
 
 			/* キーボードのいづれかのキーが押されたとき */
-			document.addEventListener('keypress', function(e){
-				console.log([
-					arguments.callee.name,
-					e,
-				]);
-
-				if (false) {
-				} else if (e.keyCode==32) {
-					/* Space key */
-					playBtn.click();
-				}
-			}, false );
+			document.addEventListener('keypress', onkeyPress, false );
 
 			/* Play ボタンのリスナー関数 */
 			function playAudio() {
@@ -338,6 +327,21 @@
 			/* ページロード完了イベントリスナー関数 */
 			function onloadDOM() {
 				stopAudio();
+			}
+
+			function onkeyPress(e) {
+				console.log([
+					arguments.callee.name,
+					e,
+				]);
+
+				switch (e.keyCode) {
+					case 32:  /* Space key */
+					case 999:
+						playBtn.click();
+					default:
+						break;
+				}
 			}
 
 			/* 四捨五入関数 */
