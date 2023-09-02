@@ -134,6 +134,8 @@
 				document.querySelector('#audio_currenttime').innerText = sectotime(audio.currentTime);
 				document.querySelector('#audio_currenttime_progressbar').value = audio.currentTime / audio.duration;
 				document.querySelector('#audio_currenttime_progressbar').title = orgRound(audio.currentTime / audio.duration * 100, 100000) + '%';
+				document.querySelector('#audio_currenttime_seekbar').value = audio.currentTime / audio.duration;
+				document.querySelector('#audio_currenttime_seekbar').title = orgRound(audio.currentTime / audio.duration * 100, 100000) + '%';
 				document.querySelector('#audio_volume').innerText = parseInt(audio.volume * 100, 10) + '%';
 				document.querySelector('#audio_speed').innerText = parseInt(audio.playbackRate * 100, 10) + '%';
 			}
@@ -195,6 +197,14 @@
 				audioInfo_dom[3].value = 0;
 				audioInfo_dom[3].id = 'audio_currenttime_progressbar';
 				audioInfo_dom[3].classList.add('css_flex');
+				audioInfo_dom[2].appendChild(audioInfo_dom[3]);
+				audioInfo_dom[3] = document.createElement('input');
+				audioInfo_dom[3].type = 'range';
+				audioInfo_dom[3].min = '0';
+				audioInfo_dom[3].max = '1';
+				audioInfo_dom[3].step = '0.0001';
+				audioInfo_dom[3].value = '0';
+				audioInfo_dom[3].id = 'audio_currenttime_seekbar';
 				audioInfo_dom[2].appendChild(audioInfo_dom[3]);
 				audioInfo_dom[1].appendChild(audioInfo_dom[2]);
 				audioInfo_dom[0].appendChild(audioInfo_dom[1]);
