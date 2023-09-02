@@ -134,8 +134,6 @@
 				document.querySelector('#audio_currenttime').innerText = sectotime(audio.currentTime);
 				document.querySelector('#audio_currenttime_progressbar').value = audio.currentTime / audio.duration;
 				document.querySelector('#audio_currenttime_progressbar').title = orgRound(audio.currentTime / audio.duration * 100, 100000) + '%';
-				document.querySelector('#audio_currenttime_seekbar').value = audio.currentTime / audio.duration;
-				document.querySelector('#audio_currenttime_seekbar').title = orgRound(audio.currentTime / audio.duration * 100, 100000) + '%';
 				document.querySelector('#audio_volume').innerText = parseInt(audio.volume * 100, 10) + '%';
 				document.querySelector('#audio_speed').innerText = parseInt(audio.playbackRate * 100, 10) + '%';
 			}
