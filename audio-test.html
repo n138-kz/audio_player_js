@@ -172,7 +172,9 @@
 				audioInfo_dom[2].innerText = 'Duration';
 				audioInfo_dom[1].appendChild(audioInfo_dom[2]);
 				audioInfo_dom[2] = document.createElement('td');
-				audioInfo_dom[2].id = 'audio_duration';
+				audioInfo_dom[3] = document.createElement('span');
+				audioInfo_dom[3].id = 'audio_duration';
+				audioInfo_dom[2].appendChild(audioInfo_dom[3]);
 				audioInfo_dom[1].appendChild(audioInfo_dom[2]);
 				audioInfo_dom[0].appendChild(audioInfo_dom[1]);
 
