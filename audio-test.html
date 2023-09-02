@@ -334,6 +334,15 @@
 				document.querySelector('audio').playbackRate = orgRound(currentSpeed, 100);
 			}
 
+			/*  */
+			function onchagnge_audio_currenttime_seekbar(e) {
+				console.log([
+					arguments.callee.name,
+					e,
+				]);
+				
+			}
+
 			/* ページロード完了イベントリスナー関数 */
 			function onloadDOM() {
 				stopAudio();
