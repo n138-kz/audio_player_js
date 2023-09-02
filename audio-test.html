@@ -151,7 +151,7 @@
 					let dom = document.createElement('option');
 					dom.value = i/100;
 					dom.innerText = 'Vol' + ' ' + i + '%';
-					if (i==100) {
+					if (i==0) {
 						dom.selected = true;
 					}
 					audioVolumeSelector.appendChild(dom);
@@ -168,6 +168,7 @@
 				}
 
 				const audio = document.querySelector('audio');
+				audio.volume=0;
 				const audioInfo = document.querySelector('#audio-info');
 				let audioInfo_dom = [];
 				audioInfo_dom[0] = document.createElement('table');
