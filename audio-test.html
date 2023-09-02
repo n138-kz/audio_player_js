@@ -198,14 +198,6 @@
 				audioInfo_dom[3].id = 'audio_currenttime_progressbar';
 				audioInfo_dom[3].classList.add('css_flex');
 				audioInfo_dom[2].appendChild(audioInfo_dom[3]);
-				audioInfo_dom[3] = document.createElement('input');
-				audioInfo_dom[3].type = 'range';
-				audioInfo_dom[3].min = '0';
-				audioInfo_dom[3].max = '1';
-				audioInfo_dom[3].step = '0.0001';
-				audioInfo_dom[3].value = '0';
-				audioInfo_dom[3].id = 'audio_currenttime_seekbar';
-				audioInfo_dom[2].appendChild(audioInfo_dom[3]);
 				audioInfo_dom[1].appendChild(audioInfo_dom[2]);
 				audioInfo_dom[0].appendChild(audioInfo_dom[1]);
 
@@ -332,15 +324,6 @@
 				let currentSpeed = document.querySelector('audio').playbackRate;
 				currentSpeed = currentSpeed - 0.05;
 				document.querySelector('audio').playbackRate = orgRound(currentSpeed, 100);
-			}
-
-			/*  */
-			function onchagnge_audio_currenttime_seekbar(e) {
-				console.log([
-					arguments.callee.name,
-					e,
-				]);
-				
 			}
 
 			/* ページロード完了イベントリスナー関数 */
