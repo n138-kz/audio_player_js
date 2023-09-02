@@ -2,7 +2,7 @@
 
 ## Sample audio
 
-File: `sample.weba`)
+File: `sample.weba`
 
 - (仏)`Orphée aux Enfers`
 - (英)`Orpheus in the Underworld`
