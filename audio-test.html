@@ -26,6 +26,8 @@
 				</td>
 				<td>
 					<select id="audio-select-volume" onchange="volumeSetAudio(this.value)"></select>
+					<br>
+					<select id="audio-select-speed" onchange="speedSetAudio(this.value)"></select>
 				</td>
 				<td>
 					<button class="volup" type="button">Vol▲</button>
@@ -154,6 +156,16 @@
 					}
 					audioVolumeSelector.appendChild(dom);
 				}
+				const audioSpeedSelector = document.querySelector('#audio-select-speed');
+				for (let i = 125; i >= 75; i=i-5) {
+					let dom = document.createElement('option');
+					dom.value = i/100;
+					dom.innerText = 'Spd' + ' ' + i + '%';
+					if (i==100) {
+						dom.selected = true;
+					}
+					audioSpeedSelector.appendChild(dom);
+				}
 
 				const audio = document.querySelector('audio');
 				const audioInfo = document.querySelector('#audio-info');
@@ -258,6 +270,8 @@
 				console.debug([
 					arguments.callee.name,
 				]);
+
+				document.querySelector('#audio-select-speed').value = document.querySelector('audio').playbackRate;
 			}
 			
 			/* error イベントのリスナー関数 */
@@ -322,6 +336,15 @@
 				let currentSpeed = document.querySelector('audio').playbackRate;
 				currentSpeed = currentSpeed - 0.05;
 				document.querySelector('audio').playbackRate = orgRound(currentSpeed, 100);
+			}
+
+			/* spd セレクターのリスナー関数 */
+			function speedSetAudio(value) {
+				console.log([
+					arguments.callee.name,
+				]);
+				
+				document.querySelector('audio').playbackRate = value;
 			}
 
 			/* ページロード完了イベントリスナー関数 */
