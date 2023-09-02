@@ -17,13 +17,28 @@
 <body>
 	<div id="audio-player">
 		<audio src="sample.weba" preload="auto"></audio>
-		<button class="play" type="button">Play</button>
-		<button class="stop" type="button">Stop</button>
-		<select id="audio-select-volume" onchange="volumeSetAudio(this.value)"></select>
-		<button class="volup" type="button">Vol▲</button>
-		<button class="voldn" type="button">Vol▼</button>
-		<button class="spdup" type="button">Spd▲</button>
-		<button class="spddn" type="button">Spd▼</button>
+		<table>
+			<tr>
+				<td>
+					<button class="play" type="button">Play</button>
+					<br>
+					<button class="stop" type="button">Stop</button>
+				</td>
+				<td>
+					<select id="audio-select-volume" onchange="volumeSetAudio(this.value)"></select>
+				</td>
+				<td>
+					<button class="volup" type="button">Vol▲</button>
+					<br>
+					<button class="voldn" type="button">Vol▼</button>
+				</td>
+				<td>
+					<button class="spdup" type="button">Spd▲</button>
+					<br>
+					<button class="spddn" type="button">Spd▼</button>
+				</td>
+			</tr>
+		</table>
 
 		<script>
 			/* audio 要素と各ボタン要素を取得 */
