@@ -10,4 +10,4 @@ File: `sample.weba`
 
 ## Sample
 
-[https://n138-kz.github.io/audio_player_js/audio-test.html](/audio_player_js/audio-test.html)
+[/audio_player_js/audio-test.html](https://n138-kz.github.io/audio_player_js/audio-test.html)
