@@ -85,6 +85,16 @@
 			/* HTML の初期文書が完全に読み込まれ解釈されたとき */
 			document.addEventListener('DOMContentLoaded', onloadDOM, false );
 
+			/* keypress */
+			document.addEventListener('keypress', function(e){
+				console.log(e);
+				if (false) {
+				} else if (e.keyCode==32) {
+					/* Space key */
+					playBtn.click();
+				}
+			}, false );
+
 			/* Play ボタンのリスナー関数 */
 			function playAudio() {
 				console.log([
