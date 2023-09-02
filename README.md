@@ -4,9 +4,7 @@
 
 File: `sample.weba`
 
-- (仏)`Orphée aux Enfers`
-- (英)`Orpheus in the Underworld`
-- (日)`天国と地獄`
+> [少年達の夏休み的なBGM](https://dova-s.jp/bgm/play2197.html)
 
 ## Refs
 
