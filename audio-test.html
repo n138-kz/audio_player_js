@@ -85,9 +85,12 @@
 			/* HTML の初期文書が完全に読み込まれ解釈されたとき */
 			document.addEventListener('DOMContentLoaded', onloadDOM, false );
 
-			/* keypress */
+			/* キーボードのいづれかのキーが押されたとき */
 			document.addEventListener('keypress', function(e){
-				console.log(e);
+				console.log([
+					arguments.callee.name,
+				]);
+
 				if (false) {
 				} else if (e.keyCode==32) {
 					/* Space key */
