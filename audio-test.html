@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		html {
+			background: transparent;
+		}
+
+		body {
+			background: transparent;
+		}
+	</style>
+</head>
+<body>
+	<div id="audio-player">
+		<audio src="sample.weba" preload="auto"></audio>
+		<button class="play" type="button">Play</button>
+		<button class="stop" type="button">Stop</button>
+		<select id="audio-select-volume" onchange="volumeSetAudio(this.value)"></select>
+		<button class="volup" type="button">Vol▲</button>
+		<button class="voldn" type="button">Vol▼</button>
+		<button class="spdup" type="button">Spd▲</button>
+		<button class="spddn" type="button">Spd▼</button>
+
+		<script>
+			/* audio 要素と各ボタン要素を取得 */
+			const audio = document.querySelector('audio');
+			const playBtn = document.querySelector('.play');
+			const stopBtn = document.querySelector('.stop');
+			const volupBtn = document.querySelector('.volup');
+			const voldnBtn = document.querySelector('.voldn');
+			const spdupBtn = document.querySelector('.spdup');
+			const spddnBtn = document.querySelector('.spddn');
+
+			/* 各ボタン要素の click イベントにリスナー関数を登録 */
+			playBtn.addEventListener('click', playAudio, false );
+			stopBtn.addEventListener('click', stopAudio, false );
+			volupBtn.addEventListener('click', volumeUpAudio, false );
+			voldnBtn.addEventListener('click', volumeDnAudio, false );
+			spdupBtn.addEventListener('click', speedUpAudio, false );
+			spddnBtn.addEventListener('click', speedDnAudio, false );
+
+			/* メディアの終わりに達したとき */
+			audio.addEventListener('ended', endedAudio, false );
+
+			/* 再生時刻を表す currentTime プロパティの値が更新されたとき */
+			audio.addEventListener('timeupdate', timeupdateAudio, false );
+
+			/* リソースの読み込みを開始したとき */
+			audio.addEventListener('loadstart', loadstartAudio, false );
+
+			/* リソースのメタデータ（再生時間などのメタ情報）が読み込まれたとき */
+			audio.addEventListener('loadedmetadata', loadedmetadataAudio, false );
+
+			/* 再生できる状態になったとき */
+			audio.addEventListener('canplay', canplayAudio, false );
+
+			/* 音量を変更したとき。または mute 属性を変更したとき。 */
+			audio.addEventListener('volumechange', volumechangeAudio, false );
+
+			/* 再生速度（再生レート）が変更されたとき */
+			audio.addEventListener('ratechange', ratechangeAudio, false );
+
+			/* エラー（ネットワーク接続の問題など）によりリソースが読み込めなかったとき */
+			audio.addEventListener('error', resourceErrAudio, false );
+
+			/* HTML の初期文書が完全に読み込まれ解釈されたとき */
+			document.addEventListener('DOMContentLoaded', onloadDOM, false );
+
+			/* Play ボタンのリスナー関数 */
+			function playAudio() {
+				console.log([
+					arguments.callee.name,
+				]);
+
+				if (!audio.paused) {
+					/* pause() メソッドで停止 */
+					audio.pause();
+				} else {
+					/* play() メソッドで音声を再生 */
+					audio.play();
+				}
+			}
+			
+			/* Stop ボタンのリスナー関数 */
+			function stopAudio() {
+				console.log([
+					arguments.callee.name,
+				]);
+
+				/* 停止して再生位置を先頭に戻す */
+				audio.pause();
+				audio.currentTime = 0;
+			}
+
+			/* ended イベントのリスナー関数 */
+			function endedAudio() {
+				console.debug([
+					arguments.callee.name,
+				]);
+
+				playAudio();
+			}
+			
+			/* timeupdate イベントのリスナー関数 */
+			function timeupdateAudio() {
+				console.debug([
+					arguments.callee.name,
+				]);
+
+				document.querySelector('#audio_name').innerText = audio.src.split('/').pop();
+				document.querySelector('#audio_duration').innerText = sectotime(audio.duration);
+				document.querySelector('#audio_currenttime').innerText = sectotime(audio.currentTime);
+				document.querySelector('#audio_currenttime_progressbar').value = audio.currentTime / audio.duration;
+				document.querySelector('#audio_currenttime_progressbar').title = orgRound(audio.currentTime / audio.duration * 100, 100000) + '%';
+				document.querySelector('#audio_volume').innerText = parseInt(audio.volume * 100, 10) + '%';
+				document.querySelector('#audio_speed').innerText = parseInt(audio.playbackRate * 100, 10) + '%';
+			}
+			
+			/* loadstart イベントのリスナー関数 */
+			function loadstartAudio() {
+				console.debug([
+					arguments.callee.name,
+				]);
+
+				const audioVolumeSelector = document.querySelector('#audio-select-volume');
+				for (let i = 100; i >= 0; i=i-5) {
+					let dom = document.createElement('option');
+					dom.value = i/100;
+					dom.innerText = 'Vol' + ' ' + i + '%';
+					if (i==100) {
+						dom.selected = true;
+					}
+					audioVolumeSelector.appendChild(dom);
+				}
+
+				const audio = document.querySelector('audio');
+				const audioInfo = document.querySelector('#audio-info');
+				let audioInfo_dom = [];
+				audioInfo_dom[0] = document.createElement('table');
+
+				audioInfo_dom[1] = document.createElement('tr');
+				audioInfo_dom[2] = document.createElement('th');
+				audioInfo_dom[2].innerText = 'Name';
+				audioInfo_dom[1].appendChild(audioInfo_dom[2]);
+				audioInfo_dom[2] = document.createElement('td');
+				audioInfo_dom[2].innerText = audio.src.split('/').pop();
+				audioInfo_dom[2].id = 'audio_name';
+				audioInfo_dom[1].appendChild(audioInfo_dom[2]);
+				audioInfo_dom[0].appendChild(audioInfo_dom[1]);
+
+				audioInfo_dom[1] = document.createElement('tr');
+				audioInfo_dom[2] = document.createElement('th');
+				audioInfo_dom[2].innerText = 'Duration';
+				audioInfo_dom[1].appendChild(audioInfo_dom[2]);
+				audioInfo_dom[2] = document.createElement('td');
+				audioInfo_dom[2].id = 'audio_duration';
+				audioInfo_dom[1].appendChild(audioInfo_dom[2]);
+				audioInfo_dom[0].appendChild(audioInfo_dom[1]);
+
+				audioInfo_dom[1] = document.createElement('tr');
+				audioInfo_dom[2] = document.createElement('th');
+				audioInfo_dom[2].innerText = 'CurrentTime';
+				audioInfo_dom[1].appendChild(audioInfo_dom[2]);
+				audioInfo_dom[2] = document.createElement('td');
+				audioInfo_dom[3] = document.createElement('span');
+				audioInfo_dom[3].id = 'audio_currenttime';
+				audioInfo_dom[2].appendChild(audioInfo_dom[3]);
+				audioInfo_dom[3] = document.createElement('progress');
+				audioInfo_dom[3].value = 0;
+				audioInfo_dom[3].id = 'audio_currenttime_progressbar';
+				audioInfo_dom[3].classList.add('css_flex');
+				audioInfo_dom[2].appendChild(audioInfo_dom[3]);
+				audioInfo_dom[1].appendChild(audioInfo_dom[2]);
+				audioInfo_dom[0].appendChild(audioInfo_dom[1]);
+
+				audioInfo_dom[1] = document.createElement('tr');
+				audioInfo_dom[2] = document.createElement('th');
+				audioInfo_dom[2].innerText = 'Volume';
+				audioInfo_dom[1].appendChild(audioInfo_dom[2]);
+				audioInfo_dom[2] = document.createElement('td');
+				audioInfo_dom[2].innerText = 0;
+				audioInfo_dom[2].id = 'audio_volume';
+				audioInfo_dom[1].appendChild(audioInfo_dom[2]);
+				audioInfo_dom[0].appendChild(audioInfo_dom[1]);
+
+				audioInfo_dom[1] = document.createElement('tr');
+				audioInfo_dom[2] = document.createElement('th');
+				audioInfo_dom[2].innerText = 'Speed';
+				audioInfo_dom[1].appendChild(audioInfo_dom[2]);
+				audioInfo_dom[2] = document.createElement('td');
+				audioInfo_dom[2].innerText = 0;
+				audioInfo_dom[2].id = 'audio_speed';
+				audioInfo_dom[1].appendChild(audioInfo_dom[2]);
+				audioInfo_dom[0].appendChild(audioInfo_dom[1]);
+
+				audioInfo.innerText='';
+				audioInfo.appendChild(audioInfo_dom[0]);
+
+				audioInfo_dom[0] = document.createElement('div');
+				audioInfo_dom[1] = document.createElement('span');
+				audioInfo_dom[1].innerText = 'OK';
+				console.log(audio.mediaError);
+				audioInfo_dom[0].appendChild(audioInfo_dom[1]);
+				audioInfo.appendChild(audioInfo_dom[0]);
+			}
+			
+			/* loadedmetadataAudio イベントのリスナー関数 */
+			function loadedmetadataAudio() {
+				console.debug([
+					arguments.callee.name,
+				]);
+			}
+			
+			/* canplayAudio イベントのリスナー関数 */
+			function canplayAudio() {
+				console.debug([
+					arguments.callee.name,
+				]);
+			}
+			
+			/* volumechange イベントのリスナー関数 */
+			function volumechangeAudio() {
+				console.debug([
+					arguments.callee.name,
+				]);
+
+				document.querySelector('#audio-select-volume').value = document.querySelector('audio').volume;
+			}
+
+			/* ratechange イベントのリスナー関数 */
+			function ratechangeAudio() {
+				console.debug([
+					arguments.callee.name,
+				]);
+			}
+			
+			/* error イベントのリスナー関数 */
+			function resourceErrAudio() {
+				console.debug([
+					arguments.callee.name,
+				]);
+			}
+
+			/* volup ボタンのリスナー関数 */
+			function volumeUpAudio() {
+				console.log([
+					arguments.callee.name,
+				]);
+				
+				let currentVolume = document.querySelector('audio').volume;
+				if (currentVolume <= 0.95) {
+					currentVolume = currentVolume + 0.05;
+				}
+				document.querySelector('audio').volume = orgRound(currentVolume, 100);
+			}
+
+			/* voldn ボタンのリスナー関数 */
+			function volumeDnAudio() {
+				console.log([
+					arguments.callee.name,
+				]);
+				
+				let currentVolume = document.querySelector('audio').volume;
+				if (currentVolume >= 0.05) {
+					currentVolume = currentVolume - 0.05;
+				}
+				document.querySelector('audio').volume = orgRound(currentVolume, 100);
+			}
+
+			/* vol セレクターのリスナー関数 */
+			function volumeSetAudio(value) {
+				console.log([
+					arguments.callee.name,
+				]);
+				
+				document.querySelector('audio').volume = value;
+			}
+
+			/* spdup ボタンのリスナー関数 */
+			function speedUpAudio() {
+				console.log([
+					arguments.callee.name,
+				]);
+				
+				let currentSpeed = document.querySelector('audio').playbackRate;
+				currentSpeed = currentSpeed + 0.05;
+				document.querySelector('audio').playbackRate = orgRound(currentSpeed, 100);
+			}
+
+			/* spddn ボタンのリスナー関数 */
+			function speedDnAudio() {
+				console.log([
+					arguments.callee.name,
+				]);
+				
+				let currentSpeed = document.querySelector('audio').playbackRate;
+				currentSpeed = currentSpeed - 0.05;
+				document.querySelector('audio').playbackRate = orgRound(currentSpeed, 100);
+			}
+
+			/* ページロード完了イベントリスナー関数 */
+			function onloadDOM() {
+				stopAudio();
+			}
+
+			/* 四捨五入関数 */
+			function orgRound(value, base) {
+				/**
+				 * 任意の桁で四捨五入する関数
+				 * https://qiita.com/nagito25/items/0293bc317067d9e6c560
+				 * @param {number} value 四捨五入する数値
+				 * @param {number} base どの桁で四捨五入するか（10→10の位、0.1→小数第１位）
+				 * @return {number} 四捨五入した値
+				 */
+				return Math.round(value * base) / base;
+			}
+
+			function sectotime(value) {
+				let value_hrs = parseInt(value/3660, 10);
+				let value_min = parseInt(value/60, 10);
+				let value_sec = parseInt(value%60, 10);
+
+				/* 時分秒にしたとき不動部分は非表示にする */
+				if (false) {
+				} else if (value>=3660) {
+					value_min = ('00' + value_min).substr(-2);
+					value_sec = ('00' + value_sec).substr(-2);
+					return value_hrs + ':' + value_min + ':' + value_sec;
+				} else {
+					value_sec = ('00' + value_sec).substr(-2);
+					return value_min + ':' + value_sec;
+				}
+			}
+
+		</script>
+	</div>
+	<div id="audio-info"></div>
+	<style>
+		#audio-info table {
+			border-width: 1px;
+			border-color: #333;
+			border-style: solid;
+		}
+		#audio-info th {
+			border-width: 1px;
+			border-color: #333;
+			border-style: solid;
+
+		}
+		#audio-info td {
+			border-width: 1px;
+			border-color: #333;
+			border-style: solid;
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+		#audio-info progress {
+			width: 100%;
+		}
+		#audio-info .css_block {
+			display: block;
+		}
+		#audio-info .css_flex {
+			display: flex;
+		}
+	</style>
+</body>
+</html>
