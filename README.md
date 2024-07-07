@@ -1,4 +1,4 @@
-# audio_player_js
+# [audio_player_js](https://github.com/n138-kz/audio_player_js)
 
 ## Sample audio
 
